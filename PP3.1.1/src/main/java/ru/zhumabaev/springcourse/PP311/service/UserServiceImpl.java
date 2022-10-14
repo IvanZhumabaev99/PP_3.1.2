@@ -2,48 +2,51 @@ package ru.zhumabaev.springcourse.PP311.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.zhumabaev.springcourse.PP311.dao.UserDao;
 import ru.zhumabaev.springcourse.PP311.model.User;
+import ru.zhumabaev.springcourse.PP311.repositories.UsersRepository;
 
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
-
+    private final UsersRepository usersRepository;
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
-        this.userDao = userDao;
+    public UserServiceImpl(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
+
 
     @Override
     public List<User> getAllUsers() {
-        return userDao.getAllUsers();
-    }
+        return usersRepository.findAll();
+    } //getAllUsers()
 
     @Override
     @Transactional
     public void addUser(User user) {
-        userDao.addUser(user);
+        usersRepository.save(user);
     }
 
     @Override
     public User getUserById(int id) {
-        return userDao.getUserById(id);
+        Optional<User> foundUser = usersRepository.findById(id);
+        return foundUser.orElse(null);
     }
 
     @Override
     @Transactional
-    public User updateUser(User user, int id) {
-        return userDao.updateUser(user, id);
+    public User updateUser(User updatedUser, int id) {
+        usersRepository.save(updatedUser);
+        return updatedUser;
     }
 
     @Override
     @Transactional
     public void deleteUser(int id) {
-        userDao.deleteUser(id);
+        usersRepository.deleteById(id);
     }
 }

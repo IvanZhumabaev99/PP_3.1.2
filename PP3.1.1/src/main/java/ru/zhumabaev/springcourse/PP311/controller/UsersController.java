@@ -33,20 +33,20 @@ public class UsersController {
         return "/new";
     }
 
-    @PostMapping("/new") // ("/new" - попробовать сделать пустым) сохраняем нового "юзера" и возвращаемся на страницу /user/
+    @PostMapping("/new")
     public String addUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
         return "redirect:/user/";
     }
 
-    @GetMapping(value = "/edit/{id}")  //открывается окно с юзером для изменений В
+    @GetMapping(value = "/edit/{id}")
     public String editUser(@PathVariable("id") int id, ModelMap model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         return "editUser";
     }
 
-    @PostMapping(value = "/edit/{id}") //--> нажимаем "сохранить изменения" --> пересылает на страницу /new/edit/{2}
+    @PostMapping(value = "/edit/{id}")
     public String update(@ModelAttribute("user") User user,
                              @PathVariable("id") int id) {
         userService.updateUser(user, id);
